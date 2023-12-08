@@ -1,0 +1,83 @@
+---
+title: 'Regression '
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+
+# Regresion 
+a Supervised problem where we have some continues target to predict. In this Blog we have cover the Linear and nonliner regression on Two Linear and non linear data
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+```
+
+Make Linear Data
+
+```{python}
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X
+```
+
+Make code to Plot
+
+```{python}
+def MakePlot(X,y,y_pred,title="Nonlinear Regression Example"):
+    plt.figure()
+    plt.scatter(X, y)
+    plt.plot(X, y_pred, "r-")
+    plt.xlabel("Time")
+    plt.ylabel("Population")
+    plt.title(title)
+    plt.show()
+```
+
+Liner Regression model on Linear Data
+
+```{python}
+reg = LinearRegression().fit(X, y)
+print("Accuracy",int(reg.score(X, y)*100),"%")
+# print(reg.coef_,reg.intercept_)
+y_pred=reg.predict(X)
+MakePlot(X,y,y_pred,"Linear Regression Model  On Linear Data")
+```
+
+Liner Regression model on NonLinear Data
+
+```{python}
+X = np.linspace(0, 3, 100)
+# y = 2 * np.exp(1.5 * X)
+y = np.array([i*5+3 if i>3 else i*50  for i in 2 * X])
+X,y=X[:,np.newaxis],y[:,np.newaxis]
+```
+
+```{python}
+reg = LinearRegression().fit(X, y)
+print("Accuracy",int(reg.score(X, y)*100),"%")
+print(reg.coef_,reg.intercept_)
+y_pred=reg.predict(X)
+MakePlot(X,y,y_pred,"Linear Regression Model On NonLinear Data")
+```
+
+NonLiner Regression model on NonLinear Data
+
+```{python}
+from sklearn.tree import DecisionTreeRegressor
+
+reg = DecisionTreeRegressor().fit(X, y)
+print("Accuracy",int(reg.score(X, y)*100),"%")
+y_pred=reg.predict(X)
+MakePlot(X,y,y_pred,"NonLinear Regression Model On NonLinear Data")
+```
+
+Linear Regression Models work well if our Dependent variable is linearly correlated to Independent variables. However, when we try that on Nonlinear data where dependent is not linearly correlated the score is very low, but when we apply some nonlinear model (Decision Tree) on it we got a good regression Score.
+
+# Reference links:
+
+[1] https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html
+
+[2] https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeRegressor.html
+

@@ -1,0 +1,80 @@
+---
+title: Anomaly Detection
+format:
+  html:
+    code-fold: true
+jupyter: python3
+---
+
+## Anomaly detection
+Anomaly detection is the process of identifying data points, entities or events that fall outside the normal range.
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.ensemble import IsolationForest
+from sklearn.neighbors import LocalOutlierFactor
+```
+
+Make Some Dummy Data and add Anomalites on that. we have added two type of anomally onw contane large scale and other have different loction. all Data from Normal Sitribution
+
+```{python}
+# Generate synthetic data with anomalies
+np.random.seed(42)
+normal_data = np.random.normal(0, 1, (1000, 2))
+anomalies = np.random.normal(20, 1, (50, 2))
+anomalies2 = np.random.normal(0, 5, (50, 2))
+# Combine normal and anomaly data
+data = np.vstack([normal_data, anomalies,anomalies2])
+```
+
+Find the Anomality with IsolationForest. 
+
+```{python}
+
+
+# Fit the Isolation Forest model
+model = IsolationForest(contamination=0.05)  # Contamination is the proportion of outliers
+model.fit(data)
+
+# Predict the labels (1 for inliers, -1 for outliers)
+labels = model.predict(data)
+
+# Plot the data and highlight anomalies
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.title('Isolation Forest Anomaly Detection')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.colorbar()
+plt.show()
+```
+
+Find the Anomality with IsolationForest
+
+```{python}
+# Fit the Isolation Forest model
+model = LocalOutlierFactor()  # Contamination is the proportion of outliers
+
+# Predict the labels (1 for inliers, -1 for outliers)
+labels = model.fit_predict(data)
+
+# Plot the data and highlight anomalies
+plt.scatter(data[:, 0], data[:, 1], c=labels, cmap='viridis')
+plt.title('Isolation Forest Anomaly Detection')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.colorbar()
+plt.show()
+```
+
+we have implement two Anomaly Detection methods, One is IsolationForest which randomly selecting a split value between the maximum and minimum values of the selected feature to find the outlier/ Anomaly from that.
+and another is LocalOutlierFactor which measures the local deviation of the density of a given sample with respect to its neighbors. It is local in that the anomaly score depends on how isolated the object is with respect to the surrounding neighborhood.
+
+Reference links:
+
+[1]https://www.techtarget.com/searchenterpriseai/definition/anomaly-detection
+
+[2]https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.LocalOutlierFactor.html#sklearn.neighbors.LocalOutlierFactor
+
+[3]https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.IsolationForest.html#sklearn.ensemble.IsolationForest
+
